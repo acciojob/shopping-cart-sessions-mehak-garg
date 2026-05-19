@@ -18,16 +18,18 @@ function renderProducts() {
     const li = document.createElement("li");
     li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
     productList.appendChild(li);
+  document.querySelector(`[data-id="${product.id}"]`).addEventListener("click",()=>{addToCart(product.id)});
   });
+	
 }
 
 // Render cart list
 function renderCart() {
 let product;
 	products.forEach((item)=>{
-		if(sessionStorage.getItem(item.id))
+		if( JSON.parse(sessionStorage.getItem(item.id))
 		{
-			product=sessionStorage.getItem(item.id);
+			product= JSON.parse(sessionStorage.getItem(item.id));
 		}
 	cartList.innerHTML+=`<li>${product.productname} - $${product.productprice} <button class="clear-item-btn" data-id1="${item.id}">Clear item</button>`;
 })
@@ -36,6 +38,7 @@ let product;
 // Add item to cart
 function addToCart(productId) {
 	let productName,productPrice;
+	
 	products.forEach((item)=>{
 		if(productId===item.id)
 		{
@@ -43,11 +46,14 @@ productName=item.name;
 		productPrice=item.price;}	
 	})
     let product={productname:productName,productprice:productPrice};
-	sessionStorage.setItem(productId,product);
+	sessionStorage.setItem(productId, JSON.stringify(product));
+	cartList.innerHTML+=`<li>${productName} - $${productPrice} <button class="clear-item-btn" data-id1="${productId}">Clear item</button>`;
+document.querySelector(`data-id1="${productId}"`).addEventListener("click",()=>{removeFromCart(productId);})
+
 }
 
 function removeFromCart(productId) {
-       document.querySelector('[data-id1="productId"]').parentElement.remove();
+       document.querySelector(`[data-id1=${productId}]`).parentElement.remove();
 	sessionStorage.removeItem(productId);
   }
 
@@ -62,6 +68,7 @@ function removeFromCart(productId) {
 
 // Clear cart
 function clearCart() {
+	sessionStorage.clear();
 	cartList.innerHTML="";
 }
 
