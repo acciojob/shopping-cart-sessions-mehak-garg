@@ -30,8 +30,9 @@ let product;
 		if( JSON.parse(sessionStorage.getItem(item.id))
 		{
 			product= JSON.parse(sessionStorage.getItem(item.id));
+		cartList.innerHTML+=`<li>${product.productname} - $${product.productprice} <button class="clear-item-btn" data-id1="${item.id}">Clear item</button>`;
 		}
-	cartList.innerHTML+=`<li>${product.productname} - $${product.productprice} <button class="clear-item-btn" data-id1="${item.id}">Clear item</button>`;
+	
 })
 }
 
@@ -48,7 +49,7 @@ productName=item.name;
     let product={productname:productName,productprice:productPrice};
 	sessionStorage.setItem(productId, JSON.stringify(product));
 	cartList.innerHTML+=`<li>${productName} - $${productPrice} <button class="clear-item-btn" data-id1="${productId}">Clear item</button>`;
-document.querySelector(`data-id1="${productId}"`).addEventListener("click",()=>{removeFromCart(productId);})
+document.querySelector(`[data-id1="${productId}"]`).addEventListener("click",()=>{removeFromCart(productId);})
 
 }
 
