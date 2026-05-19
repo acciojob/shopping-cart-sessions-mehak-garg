@@ -11,7 +11,7 @@ const products = [
 
 // DOM elements
 const productList = document.getElementById("product-list");
-
+const cartList=document.getElementById("cart-list");
 // Render product list
 function renderProducts() {
   products.forEach((product) => {
@@ -25,10 +25,34 @@ function renderProducts() {
 function renderCart() {}
 
 // Add item to cart
-function addToCart(productId) {}
+function addToCart(productId) {
+	let productName,productPrice;
+	products.forEach((item)=>{
+		if(productId===item.id)
+		{
+productName=item.name;
+		productPrice=item.price;}	
+	})
+	cartList.innerHTML+=`<li>${productName} - $${productPrice} <button class="clear-item-btn" data-id1="${productId}">Clear item</button>``
+}
 
-// Remove item from cart
-function removeFromCart(productId) {}
+function removeFromCart(productId) {
+       document.querySelector("[data-id1="productId"]").parentElement.remove();
+
+
+  
+  
+  
+  }
+
+
+
+
+
+
+
+
+
 
 // Clear cart
 function clearCart() {}
