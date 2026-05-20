@@ -12,28 +12,28 @@ const products = [
 // DOM elements
 const productList = document.getElementById("product-list");
 const cartList=document.getElementById("cart-list");
+let cart=JSON.parse(sessionStorage.getItem("cart"))||[];
+document.querySelector("#clear-cart-btn").addEventListener("click",clearCart);
 // Render product list
 function renderProducts() {
   products.forEach((product) => {
     const li = document.createElement("li");
     li.innerHTML = `${product.name} - $${product.price} <button class="add-to-cart-btn" data-id="${product.id}">Add to Cart</button>`;
     productList.appendChild(li);
-  document.querySelector(`[data-id="${product.id}"]`).addEventListener("click",()=>{addToCart(product.id)});
+
+	  document.querySelector(`[data-id="${product.id}"]`).addEventListener("click",()=>{addToCart(product.id)});
   });
 	
 }
 
 // Render cart list
 function renderCart() {
-let product;
-	products.forEach((item)=>{
-		if( JSON.parse(sessionStorage.getItem(item.id))
-		{
-			product= JSON.parse(sessionStorage.getItem(item.id));
-		cartList.innerHTML+=`<li>${product.productname} - $${product.productprice} <button class="clear-item-btn" data-id1="${item.id}">Clear item</button>`;
-		}
+cartList.innerHTML="";
+	cart.forEach((item,index)=>{
+		cartList.innerHTML+=`<li>${item.name} - $${item.price} <button class="clear-item-btn" data-id1="${index}">Clear item</button>`;
+document.querySelector(`[data-id1="${index}"]`).addEventListener("click",()=>{removeFromCart(index);});
+	})
 	
-})
 }
 
 // Add item to cart
@@ -46,17 +46,20 @@ function addToCart(productId) {
 productName=item.name;
 		productPrice=item.price;}	
 	})
-    let product={productname:productName,productprice:productPrice};
-	sessionStorage.setItem(productId, JSON.stringify(product));
-	cartList.innerHTML+=`<li>${productName} - $${productPrice} <button class="clear-item-btn" data-id1="${productId}">Clear item</button>`;
-document.querySelector(`[data-id1="${productId}"]`).addEventListener("click",()=>{removeFromCart(productId);})
+	   let product={id:productId,name:productName,price:productPrice};
+	cart.push(product);
+	
+	sessionStorage.setItem("cart", JSON.stringify(cart));
+renderCart();
 
 }
 
-function removeFromCart(productId) {
-       document.querySelector(`[data-id1=${productId}]`).parentElement.remove();
-	sessionStorage.removeItem(productId);
-  }
+function removeFromCart(index) {
+	cart.splice(index,1);
+	sessionStorage.setItem("cart",JSON.stringify(cart));
+	renderCart();
+  
+}
 
 
 
@@ -69,8 +72,9 @@ function removeFromCart(productId) {
 
 // Clear cart
 function clearCart() {
-	sessionStorage.clear();
-	cartList.innerHTML="";
+	cart=[];
+	sessionStorage.setItem("cart",JSON.stringify(cart));
+	renderCart();
 }
 
 // Initial render
